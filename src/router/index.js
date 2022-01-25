@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Admin from '../views/Admin.vue'
+import ViewPolicy from '../views/ViewPolicy.vue'
 
 Vue.use(VueRouter)
 
@@ -9,6 +10,11 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: Admin
+  },
+  {
+    path: '/viewPolicy',
+    name: 'ViewPolicy',
+    component: ViewPolicy
   }
   // {
   //   path: '/about',

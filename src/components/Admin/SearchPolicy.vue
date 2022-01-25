@@ -1,5 +1,5 @@
 <template>
-        <section>
+    <section>
     <div class="columns">
         <div class="column">
             <b-field label="Policy Num#" label-position="on-border">
@@ -50,6 +50,9 @@
                         {{ props.row.displayTermDate }}
                     </span>
                 </b-table-column>
+                <b-table-column field="date" label="" centered v-slot="props">
+                    <b-button type="is-info is-small" @click="viewPolicy(props.row)" rounded>View</b-button>
+                </b-table-column>
 
                 <template #empty>
                     <div class="has-text-centered">No records</div>
@@ -58,11 +61,12 @@
             </b-table>
         </div>
     </div>
-        </section>
+    </section>
 </template>
 <script>
 import dataService from '@/services/dataService'
 import StateCode from '../Shared/StateCode.vue'
+import router from '@/router'
 
 export default {
     name: 'SearchPolicy',
@@ -96,6 +100,9 @@ export default {
             dataService.searchPolicy(req).then((response) => {
                 this.tableData = response.data.result
             })
+        },
+        viewPolicy (row) {
+            router.push({ path: 'viewPolicy', query: { policyNum: row.policyNum } })
         }
     }
 }
