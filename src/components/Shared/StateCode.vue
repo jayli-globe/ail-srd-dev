@@ -1,6 +1,6 @@
 <template>
     <b-field label="State" label-position="on-border">
-        <b-select v-model="selected" placeholder="Select a state" expanded>
+        <b-select v-model="selected" @input="handleCodeChange" placeholder="Select a state" expanded>
             <option
                 v-for="item in this.states"
                 :key="item.stateCode"
@@ -47,13 +47,17 @@ export default {
         },
         clear () {
             this.selected = null
+            this.handleCodeChange()
+        },
+        handleCodeChange () {
+            this.$emit('codeChanged', this.selected)
         }
     }
 }
 </script>
 <style scoped>
 .clear-icon {
-    margin-top: 6px;
+    margin-top: 8px;
     color: grey;
 }
 </style>

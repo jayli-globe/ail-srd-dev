@@ -3,24 +3,24 @@
     <div class="columns">
         <div class="column">
             <b-field label="Policy Num#" label-position="on-border">
-                <b-input placeholder='Policy #'></b-input>
+                <b-input v-model="VM.policyNum" placeholder='Policy #'></b-input>
             </b-field>
         </div>
         <div class="column">
-            <StateCode />
+            <StateCode v-on:codeChanged="handleStateCodeChanged"/>
         </div>
         <div class="column">
             <b-field label="County" label-position="on-border">
-                <b-input></b-input>
+                <b-input v-model="VM.county" placeholder="County"></b-input>
             </b-field>
         </div>
         <div class="column">
             <b-field label="Organization" label-position="on-border">
-                <b-input></b-input>
+                <b-input v-model="VM.organization" placeholder="Organization"></b-input>
             </b-field>
         </div>
         <div class="column">
-            <b-button type="is-info" rounded>Search Policy</b-button>
+            <b-button type="is-info" rounded @click="searchPolicy">Search Policy</b-button>
         </div>
         <div class="column">
             <b-button type="is-warning" rounded>New Policy</b-button>
@@ -28,38 +28,26 @@
     </div>
     <div class="columns">
         <div class="column">
-            <b-table icon-pack="fas" bordered
-                :data="data"
-                :sort-icon-size="sortIconSize"
-                default-sort="last_name"
-                >
+            <b-table icon-pack="fas" bordered :data="tableData" default-sort="policyNum" v-if="isSearched">
 
-                <b-table-column field="id" label="ID" width="50" sortable numeric v-slot="props">
-                    {{ props.row.id }}
+                <b-table-column field="policyNum" label="Policy Num" width="160" sortable v-slot="props">
+                    {{ props.row.policyNum }}
                 </b-table-column>
-
-                <b-table-column field="first_name" label="First Name" sortable v-slot="props">
-                    {{ props.row.first_name }}
+                <b-table-column field="orgName1" label="Name1" sortable v-slot="props">
+                    {{ props.row.orgName1 }}
                 </b-table-column>
-
-                <b-table-column field="last_name" label="Last Name" sortable v-slot="props">
-                    {{ props.row.last_name }}
+                <b-table-column field="orgName2" label="Name2" sortable v-slot="props">
+                    {{ props.row.orgName2 }}
                 </b-table-column>
-
-                <b-table-column field="date" label="Date" sortable centered v-slot="props">
-                    <span class="tag is-success">
-                        {{ new Date(props.row.date).toLocaleDateString() }}
-                    </span>
+                <b-table-column field="stateAbbrev" label="State" width="80" sortable v-slot="props">
+                    {{ props.row.stateAbbrev }}
                 </b-table-column>
-
-                <b-table-column label="Gender" v-slot="props">
-                    <span>
-                        <b-icon
-                            v-if="props.row.id !== 'Total'"
-                            pack="fas"
-                            :icon="props.row.gender === 'Male' ? 'mars' : 'venus'">
-                        </b-icon>
-                        {{ props.row.gender }}
+                <b-table-column field="countyName" label="County" width="160" sortable v-slot="props">
+                    {{ props.row.countyName }}
+                </b-table-column>
+                <b-table-column field="displayTermDate" label="TermDate" width="120" sortable v-slot="props">
+                    <span class="tag is-danger is-light" v-if="props.row.displayTermDate != ''">
+                        {{ props.row.displayTermDate }}
                     </span>
                 </b-table-column>
 
@@ -73,6 +61,7 @@
         </section>
 </template>
 <script>
+import dataService from '@/services/dataService'
 import StateCode from '../Shared/StateCode.vue'
 
 export default {
@@ -81,16 +70,32 @@ export default {
         StateCode
     },
     data () {
-        const data = [
-            { id: 1, first_name: 'Jesse', last_name: 'Simmons', date: '2016/10/15 13:43:27', gender: 'Male' },
-            { id: 2, first_name: 'John', last_name: 'Jacobs', date: '2016/12/15 06:00:53', gender: 'Male' }
-        ]
-
         return {
-            data,
-            defaultSortDirection: 'asc',
-            sortIcon: 'arrow-up',
-            sortIconSize: 'is-small'
+        VM: {
+            policyNum: '',
+            state: '',
+            county: '',
+            organization: ''
+        },
+        isSearched: false,
+        tableData: []
+        }
+    },
+    methods: {
+        handleStateCodeChanged (state) {
+            this.VM.state = state
+        },
+        searchPolicy () {
+            this.isSearched = true
+            const req = {
+                policyNum: this.VM.policyNum,
+                state: this.VM.state,
+                county: this.VM.county,
+                organization: this.VM.organization
+            }
+            dataService.searchPolicy(req).then((response) => {
+                this.tableData = response.data.result
+            })
         }
     }
 }
