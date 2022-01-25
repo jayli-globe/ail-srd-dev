@@ -1,5 +1,16 @@
 <template>
   <div class="admin">
-      This is admin
+    <AdminSearch />
   </div>
 </template>
+
+<script>
+import AdminSearch from '../components/AdminSearch.vue'
+
+export default {
+  name: 'Admin',
+  components: {
+    AdminSearch
+  }
+}
+</script>
