@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import AdminSearch from '../components/AdminSearch.vue'
+import AdminSearch from '../components/Admin/AdminSearch.vue'
 
 export default {
   name: 'Admin',

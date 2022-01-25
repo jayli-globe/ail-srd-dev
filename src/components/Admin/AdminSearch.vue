@@ -2,7 +2,7 @@
     <section>
         <b-tabs position="is-centered" class="block">
             <b-tab-item label="Policy">
-                Lorem ipsum dolor sit amet.
+                <SearchPolicy />
             </b-tab-item>
             <b-tab-item label="Activity">
                 Lorem <br>
@@ -38,7 +38,12 @@
 </template>
 
 <script>
+import SearchPolicy from './SearchPolicy.vue'
+
 export default {
-  name: 'AdminSearch'
+  name: 'AdminSearch',
+  components: {
+    SearchPolicy
+  }
 }
 </script>
