@@ -7,7 +7,7 @@
                     Organization Information
                 </p>
                 <div class="panel-block">
-                    <NameAddress />
+                    <NameAddress ref="NameAddress" />
                 </div>
             </nav>
         </div>
@@ -123,6 +123,21 @@ export default {
     methods: {
         setPolicy (policy) {
             this.VM.policy = policy
+            this.VM.nameAddress.name1 = policy.orgName1
+            this.VM.nameAddress.name2 = policy.orgName2
+            this.VM.nameAddress.address1 = policy.orgAddr1
+            this.VM.nameAddress.address2 = policy.orgAddr2
+            this.VM.nameAddress.city = policy.orgCitySt
+            this.VM.nameAddress.zip = policy.orgZip
+            this.VM.nameAddress.contact = policy.orgContact
+            this.VM.nameAddress.email = policy.orgEmail
+            this.VM.nameAddress.phone = policy.orgPhone
+            this.setPolicyNameAddress()
+        },
+        setPolicyNameAddress () {
+            let nameAddress = {}
+            nameAddress = this.VM.nameAddress
+            this.$refs.NameAddress.setNameAddress(nameAddress)
         }
     }
 

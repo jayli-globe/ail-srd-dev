@@ -1,6 +1,6 @@
 <template>
     <section>
-        <b-tabs position="is-centered" class="block">
+        <b-tabs position="is-centered" size="is-medium">
             <b-tab-item label="Policy">
                 <SearchPolicy />
             </b-tab-item>

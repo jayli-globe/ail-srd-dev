@@ -55,6 +55,6 @@ a.navbar-item, .navbar-link {
   margin-left: 10px;
 }
 .router-view {
-  margin-top: 25px;
+  margin-top: 30px;
 }
 </style>
