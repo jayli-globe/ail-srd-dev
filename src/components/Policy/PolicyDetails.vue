@@ -1,52 +1,10 @@
 <template>
 <section>
-    <div class="tile is-ancestor">
-        <div class="tile is-4 is-vertical is-parent">
-            <div class="tile is-child">
-                <nav class="panel">
-                    <p class="panel-heading">
-                        Organization Information
-                    </p>
-                    <div class="panel-block">
-                        Address
-                    </div>
-                </nav>
-            </div>
-            <div class="tile is-child">
-                <nav class="panel">
-                    <p class="panel-heading">
-                        Additional Information
-                    </p>
-                    <div class="panel-block">
-                        Address
-                    </div>
-                </nav>
-            </div>
+    <div class="columns">
+        <div class="column is-three-quarters">
+            <PolicyEditor ref="PolicyEditor" />
         </div>
-        <div class="tile is-4 is-vertical is-parent">
-            <div class="tile is-child">
-                <nav class="panel">
-                    <p class="panel-heading">
-                        Coverage
-                    </p>
-                    <div class="panel-block">
-                        Address
-                    </div>
-                </nav>
-            </div>
-            <div class="tile is-child">
-                <nav class="panel">
-                    <p class="panel-heading">
-                        Notes
-                    </p>
-                    <div class="panel-block">
-                        Address
-                    </div>
-                </nav>
-            </div>
-        </div>
-        <div class="tile is-parent">
-            <div class="tile is-child">
+        <div class="column">
                 <nav class="panel">
                     <p class="panel-heading">
                         Letter History
@@ -54,7 +12,6 @@
                     <div class="panel-block">
                     </div>
                 </nav>
-            </div>
         </div>
     </div>
     <div class="columns">
@@ -66,3 +23,37 @@
     </div>
 </section>
 </template>
+<script>
+import PolicyEditor from '@/components/Editors/PolicyEditor.vue'
+import dataService from '@/services/dataService'
+
+export default {
+    name: 'PolicyDetails',
+    components: {
+        PolicyEditor
+    },
+    data () {
+        return {
+            VM: {
+                policyNum: null,
+                letterHistoryFilter: null
+            }
+        }
+    },
+    methods: {
+        setPolicyNum (policyNum) {
+            this.VM.policyNum = policyNum
+            this.getPolicyById(policyNum)
+        },
+        getPolicyById (policyNum) {
+            this.VM.policyNum = policyNum
+            dataService.getEntityById('policy', policyNum).then((response) => {
+                this.setPolicy(response.data.result)
+            })
+        },
+        setPolicy (policy) {
+            this.$refs.PolicyEditor.setPolicy(policy)
+        }
+    }
+}
+</script>

@@ -2,7 +2,7 @@
     <section>
         <b-breadcrumb align="is-left">
             <b-breadcrumb-item tag='router-link' to="/admin">Home</b-breadcrumb-item>
-            <b-breadcrumb-item tag='router-link' to="/viewPolicy" active>View Policy</b-breadcrumb-item>
+            <b-breadcrumb-item tag='router-link' to="/viewPolicy" active>View Policy - {{VM.policyNum}}</b-breadcrumb-item>
         </b-breadcrumb>
         <b-tabs class="block" pack="fas">
             <template v-for="item in editableTabs">
@@ -10,7 +10,7 @@
                     :key="item.id"
                     :value="item.id"
                     :label="item.label">
-                    <PolicyDetails :policyNum="VM.policyNum" v-if="item.content=='policy-details'" />
+                    <PolicyDetails ref="PolicyDetails" v-if="item.content=='policy-details'" />
                     <PolicyActivities :policyNum="VM.policyNum" v-if="item.content=='policy-activities'" />
                     <PolicyReceipts :policyNum="VM.policyNum" v-if="item.content=='policy-receipts'" />
                     <PolicyClaims :policyNum="VM.policyNum" v-if="item.content=='policy-claims'" />
@@ -36,6 +36,10 @@ export default {
         PolicyReceipts,
         PolicyClaims,
         PolicyLetters
+    },
+    mounted () {
+        const policyNum = this.$route.query.policyNum
+        this.setPolicyNum(policyNum)
     },
     data () {
         return {
@@ -68,6 +72,12 @@ export default {
                 id: '5',
                 content: 'policy-letters'
             }]
+        }
+    },
+    methods: {
+        setPolicyNum (policyNum) {
+            this.VM.policyNum = policyNum
+            this.$refs.PolicyDetails[0].setPolicyNum(policyNum)
         }
     }
 }
