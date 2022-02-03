@@ -20,6 +20,17 @@
                     <section style="width: 100%">
                         <div class="columns">
                             <div class="column is-two-thirds">
+                                <b-field label="Policy Type" label-position="on-border">
+                                    <b-select v-model="VM.policy.policyType" placeholder="Select" expanded>
+                                        <option
+                                            v-for="item in VM.policyTypes"
+                                            :key="item.key"
+                                            :value="item.value"
+                                            >
+                                            {{ item.displayName }}
+                                        </option>
+                                    </b-select>
+                                </b-field>
                             </div>
                             <div class="column">
                                 <b-field label="Accident" label-position="on-border">
@@ -29,6 +40,17 @@
                         </div>
                         <div class="columns">
                             <div class="column is-two-thirds">
+                                <b-field label="Risk Code" label-position="on-border">
+                                    <b-select v-model="VM.policy.riskCode" placeholder="Select" expanded>
+                                        <option
+                                            v-for="item in VM.riskCodes"
+                                            :key="item.key"
+                                            :value="item.value"
+                                            >
+                                            {{ item.displayName }}
+                                        </option>
+                                    </b-select>
+                                </b-field>
                             </div>
                             <div class="column">
                                 <b-field label="Dental" label-position="on-border">
@@ -90,6 +112,7 @@
                     Additional Information
                 </p>
                 <div class="panel-block">
+
                 </div>
             </nav>
         </div>
@@ -116,10 +139,8 @@ export default {
     components: {
         NameAddress
     },
-    mounted () {
-        setTimeout(() => {
-        this.loadPolicyView()
-        }, 0)
+    async created () {
+        await this.loadPolicyView()
     },
     data () {
         return {
@@ -175,11 +196,10 @@ export default {
             policyTypeData.forEach(item => {
                 const pt = {}
                 pt.key = item._PolicyType
-                pt.value = item.description
+                pt.value = item._PolicyType
                 pt.displayName = appService.zeroPad(item._PolicyType, 2) + ' - ' + item.description
                 this.VM.policyTypes.push(pt)
             })
-            this.$refs.policyTypes.setItems(this.VM.policyTypes)
         },
         async loadRiskCodes () {
             const req = {
@@ -193,11 +213,10 @@ export default {
             riskCodeData.forEach(item => {
                 const rc = {}
                 rc.key = item.riskCode
-                rc.value = item.description
+                rc.value = item.riskCode
                 rc.displayName = appService.zeroPad(item.riskCode, 2) + ' - ' + item.description
                 this.VM.riskCodes.push(rc)
             })
-            this.$refs.riskCodes.setItems(this.VM.riskCodes)
         },
         async loadPlanCodes () {
             const req = {
