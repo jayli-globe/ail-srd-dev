@@ -1,6 +1,6 @@
 <template>
     <b-field label="State" label-position="on-border">
-        <b-select v-model="selected" @input="handleCodeChange" placeholder="Select a state" expanded>
+        <b-select v-model="state" @input="handleCodeChange" placeholder="Select a state" expanded>
             <option
                 v-for="item in this.states"
                 :key="item.stateCode"
@@ -9,7 +9,7 @@
                 {{ item.displayName }}
             </option>
         </b-select>
-        <a href='#' @click="clear" v-show="selected != null">
+        <a href='#' @click="clear" v-show="state != null">
             <b-icon pack="fas" icon="times" class="clear-icon"></b-icon>
         </a>
     </b-field>
@@ -31,7 +31,7 @@ export default {
     },
     data () {
         return {
-            selected: null,
+            state: null,
             states: []
         }
     },
@@ -46,11 +46,11 @@ export default {
             })
         },
         clear () {
-            this.selected = null
+            this.state = null
             this.handleCodeChange()
         },
         handleCodeChange () {
-            this.$emit('codeChanged', this.selected)
+            this.$emit('codeChanged', this.state)
         }
     }
 }

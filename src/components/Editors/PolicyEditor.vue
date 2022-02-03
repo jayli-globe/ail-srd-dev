@@ -20,7 +20,7 @@
                     <section style="width: 100%">
                         <div class="columns">
                             <div class="column is-two-thirds">
-                                <CommonSelect class="is-two-thirds" label="Policy Type" ref="policyTypes"/>
+                                <CommonSelect :selected="VM.policy.policyType" label="Policy Type" ref="policyTypes"/>
                             </div>
                             <div class="column">
                                 <b-field label="Accident" label-position="on-border">
@@ -30,7 +30,7 @@
                         </div>
                         <div class="columns">
                             <div class="column is-two-thirds">
-                                <CommonSelect label="Risk Code" ref="riskCodes"/>
+                                <CommonSelect v-model="VM.policy.riskCode" label="Risk Code" ref="riskCodes"/>
                             </div>
                             <div class="column">
                                 <b-field label="Dental" label-position="on-border">
@@ -92,7 +92,7 @@
                     Additional Information
                 </p>
                 <div class="panel-block">
-                    Address
+                    <StateCode v-model="VM.policy.stateCode"/>
                 </div>
             </nav>
         </div>
@@ -111,6 +111,7 @@
 </template>
 <script>
 import NameAddress from '@/components/Shared/NameAddress.vue'
+import StateCode from '@/components/Shared/StateCode.vue'
 import CommonSelect from '@/components/Shared/CommonSelect.vue'
 import appService from '@/services/appService'
 import dataService from '@/services/dataService'
@@ -119,6 +120,7 @@ export default {
     name: 'PolicyEditor',
     components: {
         NameAddress,
+        StateCode,
         CommonSelect
     },
     mounted () {

@@ -17,10 +17,9 @@
 <script>
 export default {
     name: 'CommonSelect',
-    props: ['label'],
+    props: ['label', 'selected'],
     data () {
         return {
-            selected: null,
             items: null
         }
     },
