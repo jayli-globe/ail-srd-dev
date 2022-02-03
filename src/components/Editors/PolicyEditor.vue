@@ -17,14 +17,22 @@
                     Coverage
                 </p>
                 <div class="panel-block">
-                    <section>
+                    <section style="width: 100%">
                         <div class="columns">
-                            <div class="column is-half">
+                            <div class="column is-two-thirds">
+                                <CommonSelect class="is-two-thirds" label="Policy Type" ref="policyTypes"/>
+                            </div>
+                            <div class="column">
                                 <b-field label="Accident" label-position="on-border">
                                     <b-input v-model="VM.policy.maxBen1" placeholder="0"></b-input>
                                 </b-field>
                             </div>
-                            <div class="column is-half">
+                        </div>
+                        <div class="columns">
+                            <div class="column is-two-thirds">
+                                <CommonSelect label="Risk Code" ref="riskCodes"/>
+                            </div>
+                            <div class="column">
                                 <b-field label="Dental" label-position="on-border">
                                     <b-input v-model="VM.policy.maxBen2" placeholder="0"></b-input>
                                 </b-field>
@@ -36,6 +44,8 @@
                                     <b-input v-model="VM.policy.maxBen3" placeholder="0"></b-input>
                                 </b-field>
                             </div>
+                        </div>
+                        <div class="columns">
                             <div class="column is-half">
                                 <b-field label="Disease" label-position="on-border">
                                     <b-input v-model="VM.policy.maxBen4" placeholder="0"></b-input>
@@ -48,6 +58,8 @@
                                     <b-input v-model="VM.policy.maxBen5" placeholder="0"></b-input>
                                 </b-field>
                             </div>
+                        </div>
+                        <div class="columns">
                             <div class="column is-half">
                                 <b-field label="Dbl Dismem" label-position="on-border">
                                     <b-input v-model="VM.policy.maxBen6" placeholder="0"></b-input>
@@ -60,6 +72,8 @@
                                     <b-input v-model="VM.policy.maxBen7" placeholder="0"></b-input>
                                 </b-field>
                             </div>
+                        </div>
+                        <div class="columns">
                             <div class="column is-half">
                                 <b-field label="Eye Sight" label-position="on-border">
                                     <b-input v-model="VM.policy.maxBen8" placeholder="0"></b-input>
@@ -97,11 +111,20 @@
 </template>
 <script>
 import NameAddress from '@/components/Shared/NameAddress.vue'
+import CommonSelect from '@/components/Shared/CommonSelect.vue'
+import appService from '@/services/appService'
+import dataService from '@/services/dataService'
 
 export default {
     name: 'PolicyEditor',
     components: {
-        NameAddress
+        NameAddress,
+        CommonSelect
+    },
+    mounted () {
+        setTimeout(() => {
+        this.loadPolicyView()
+        }, 0)
     },
     data () {
         return {
@@ -138,8 +161,66 @@ export default {
             let nameAddress = {}
             nameAddress = this.VM.nameAddress
             this.$refs.NameAddress.setNameAddress(nameAddress)
+        },
+        async loadPolicyView () {
+            await this.loadPolicyTypes()
+            await this.loadRiskCodes()
+            await this.loadPlanCodes()
+            await this.loadSummaryCodes()
+        },
+        async loadPolicyTypes () {
+            const req = {
+                entityName: 'policytype'
+            }
+            await dataService.getCodeByName(req).then((response) => {
+                this.setPolicyTypes(response.data.result)
+            })
+        },
+        setPolicyTypes (policyTypeData) {
+            policyTypeData.forEach(item => {
+                const pt = {}
+                pt.key = item._PolicyType
+                pt.value = item.description
+                pt.displayName = appService.zeroPad(item._PolicyType, 2) + ' - ' + item.description
+                this.VM.policyTypes.push(pt)
+            })
+            this.$refs.policyTypes.setItems(this.VM.policyTypes)
+        },
+        async loadRiskCodes () {
+            const req = {
+                entityName: 'riskcode'
+            }
+            await dataService.getCodeByName(req).then((response) => {
+                this.setRiskCodes(response.data.result)
+            })
+        },
+        setRiskCodes (riskCodeData) {
+            riskCodeData.forEach(item => {
+                const rc = {}
+                rc.key = item.riskCode
+                rc.value = item.description
+                rc.displayName = appService.zeroPad(item.riskCode, 2) + ' - ' + item.description
+                this.VM.riskCodes.push(rc)
+            })
+            this.$refs.riskCodes.setItems(this.VM.riskCodes)
+        },
+        async loadPlanCodes () {
+            const req = {
+                entityName: 'plancode'
+            }
+            await dataService.getCodeByName(req).then((response) => {
+                this.VM.planCodes = response.data.result
+            })
+        },
+        async loadSummaryCodes () {
+            const req = {
+                entityName: 'summarycode'
+            }
+            await dataService.getCodeByName(req).then((response) => {
+                this.VM.summaryCodes = response.data.result
+            })
         }
-    }
 
+    }
 }
 </script>
