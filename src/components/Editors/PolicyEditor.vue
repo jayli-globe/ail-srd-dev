@@ -59,14 +59,40 @@
                             </div>
                         </div>
                         <div class="columns">
-                            <div class="column is-half">
+                            <div class="column is-two-thirds">
+                                <b-field label="Plan Code" label-position="on-border">
+                                    <b-select v-model="VM.policy.planCode" placeholder="Select" expanded>
+                                        <option
+                                            v-for="item in VM.planCodes"
+                                            :key="item.key"
+                                            :value="item.value"
+                                            >
+                                            {{ item.displayName }}
+                                        </option>
+                                    </b-select>
+                                </b-field>
+                            </div>
+                            <div class="column">
                                 <b-field label="Illness" label-position="on-border">
                                     <b-input v-model="VM.policy.maxBen3" placeholder="0"></b-input>
                                 </b-field>
                             </div>
                         </div>
                         <div class="columns">
-                            <div class="column is-half">
+                            <div class="column is-two-thirds">
+                                <b-field label="Summary Code" label-position="on-border">
+                                    <b-select v-model="VM.policy.sumCat" placeholder="Select" expanded>
+                                        <option
+                                            v-for="item in VM.summaryCodes"
+                                            :key="item.key"
+                                            :value="item.value"
+                                            >
+                                            {{ item.displayName }}
+                                        </option>
+                                    </b-select>
+                                </b-field>
+                            </div>
+                            <div class="column">
                                 <b-field label="Disease" label-position="on-border">
                                     <b-input v-model="VM.policy.maxBen4" placeholder="0"></b-input>
                                 </b-field>
@@ -223,7 +249,16 @@ export default {
                 entityName: 'plancode'
             }
             await dataService.getCodeByName(req).then((response) => {
-                this.VM.planCodes = response.data.result
+                this.setPlanCodes(response.data.result)
+            })
+        },
+        setPlanCodes (planCodeData) {
+            planCodeData.forEach(item => {
+                const pc = {}
+                pc.key = item.planCode
+                pc.value = item.planCode
+                pc.displayName = appService.zeroPad(item.planCode, 2) + ' - ' + item.description
+                this.VM.planCodes.push(pc)
             })
         },
         async loadSummaryCodes () {
@@ -231,7 +266,16 @@ export default {
                 entityName: 'summarycode'
             }
             await dataService.getCodeByName(req).then((response) => {
-                this.VM.summaryCodes = response.data.result
+                this.setSummaryCodes(response.data.result)
+            })
+        },
+        setSummaryCodes (summaryCodeData) {
+            summaryCodeData.forEach(item => {
+                const sc = {}
+                sc.key = item.summaryCode
+                sc.value = item.summaryCode
+                sc.displayName = appService.zeroPad(item.summaryCode, 2) + ' - ' + item.description
+                this.VM.summaryCodes.push(sc)
             })
         }
 
